@@ -15,9 +15,37 @@ table.addCrypto(rvn);
 table.addCrypto(ada);
 table.addCrypto(usdt);
 
-let tableContainer = document.createElement("table");
-document.body.appendChild(tableContainer);
-table.draw(tableContainer);
-console.log(table);
+let div = document.createElement("div");
+document.body.appendChild(div);
 
-//console.log(btc.displayInfo());
+table.draw(div);
+
+let divSelect = document.createElement("div");
+document.body.appendChild(divSelect);
+divSelect.setAttribute("id", "divSelect");
+
+let label = document.createElement("label");
+label.setAttribute("for", "cryptocurrency");
+label.innerHTML = "Choose a crypto:";
+divSelect.appendChild(label);
+
+let select = document.createElement("select");
+select.setAttribute("name", "cryptocurrency");
+select.setAttribute("name", "cryptocurrencyid");
+divSelect.appendChild(select);
+
+let arr = table.getElements();
+arr.forEach(p => {
+    let option = document.createElement("option");
+    option.setAttribute("value", p.getAbbreviation());
+    option.innerHTML = p.getAbbreviation();
+    select.appendChild(option);
+});
+select.onchange = () => {
+    let crypto = select.value;
+    let cryptoObj = arr.find(p => p.getAbbreviation() == crypto);
+    table.changeBaseline(cryptoObj);
+    table.getContainer().remove();
+    table.draw(div);
+
+};

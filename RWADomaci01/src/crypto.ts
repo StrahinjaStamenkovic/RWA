@@ -23,7 +23,7 @@ export class Crypto {
         return `Crypto name: ${this.name},  Abbreviation: ${this.abbreviation}, Price in USD: $${this.priceUSD}.`;
     }
     convertTo(someCrypto: Crypto): number {
-        return someCrypto.getPriceUSD() / this.priceUSD;
+        return this.priceUSD / someCrypto.getPriceUSD();
     }
     draw(container: HTMLElement) {
         if (container === null)
