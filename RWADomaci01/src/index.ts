@@ -31,7 +31,7 @@ divSelect.appendChild(label);
 
 let select = document.createElement("select");
 select.setAttribute("name", "cryptocurrency");
-select.setAttribute("name", "cryptocurrencyid");
+select.setAttribute("id", "cryptocurrencyid");
 divSelect.appendChild(select);
 
 let arr = table.getElements();

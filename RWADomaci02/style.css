@@ -1,0 +1,12 @@
+.InactiveMole{
+    
+}
+.ActiveMole{
+    background-color: aqua;
+}
+.Hit{
+    background-color: green;
+}
+.Miss{
+    background-color: red;
+}

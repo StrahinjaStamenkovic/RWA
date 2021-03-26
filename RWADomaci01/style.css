@@ -12,7 +12,7 @@ table {
 table thead tr {
     background-color: #009879;
     color: #ffffff;
-    text-align: center;
+    text-align: left;
 }
 th,td {
     padding: 12px 15px;
@@ -20,7 +20,7 @@ th,td {
 }
 table tbody tr {
     border-bottom: thin solid #dddddd;
-    text-align: center;
+    text-align: left;
 }
 tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
