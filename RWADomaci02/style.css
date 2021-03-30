@@ -1,12 +1,52 @@
-.InactiveMole{
-    
+/*.InactiveMole {
 }
-.ActiveMole{
-    background-color: aqua;
+.ActiveMole {
+  background-color: aqua;
 }
-.Hit{
-    background-color: green;
+.Hit {
+  background-color: green;
 }
-.Miss{
-    background-color: red;
+.Miss {
+  background-color: red;
+}*/
+.Tile {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  text-overflow: ellipsis;
+}
+.ActiveTile {
+  background-color: aqua;
+}
+.Cleared {
+  background-color: greenyellow;
+}
+.NotCleared {
+  background-color: red;
+}
+.Row {
+  display: flex;
+  justify-content: center;
+}
+header {
+  text-align: center;
+}
+.Start {
+  align-self: center;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+.PlayerInfo {
+  display: flex;
+  justify-content: center;
+}
+.PlayerName,
+.PlayerScore,
+.PlayerTopScore,
+.PlayerLives {
+  margin: 15px;
 }
