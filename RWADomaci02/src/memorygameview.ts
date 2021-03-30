@@ -79,8 +79,9 @@ export class MemoryGameView {
   async showTile(tile: HTMLElement) {
     return new Promise((resolve, reject) => {
       tile.classList.add("ActiveTile");
-      setTimeout(() => {
+      setTimeout(async () => {
         tile.classList.remove("ActiveTile");
+        await this.sleep(500);
         resolve(null);
       }, 500);
     });
