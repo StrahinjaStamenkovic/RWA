@@ -1,0 +1,36 @@
+.CookieClicker,
+.Upgrades {
+  display: flex;
+  justify-content: center;
+}
+/*.CookieClicker {
+  justify-content: space-evenly;
+}*/
+.Upgrades {
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 20px;
+}
+.CookieContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+.Cookie {
+  width: 200px;
+  height: 200px;
+  background-color: rgb(187, 124, 30);
+  border: none;
+  color: white;
+
+  border-radius: 50%;
+}
+.CookieAmount {
+  font-size: 50px;
+  align-self: center;
+}
+header {
+  text-align: center;
+  font-size: 100px;
+  margin: 20px;
+}
