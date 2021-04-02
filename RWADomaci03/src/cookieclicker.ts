@@ -4,13 +4,13 @@ import { Upgrade, UpgradeType } from "./upgrade";
 
 export class CookieClicker {
   private upgrades: Upgrade[];
-  private mainCookie: Upgrade = new Upgrade(
+  /*private mainCookie: Upgrade = new Upgrade(
     "The main one",
     "Get a cookie each time you click",
     1,
     30,
-    UpgradeType.activeOnClickMain
-  );
+    //UpgradeType.activeOnClickMain
+  );*/
   private player: Player;
 
   private playerCookieAmountListener: Subject<number>;
@@ -23,6 +23,9 @@ export class CookieClicker {
 
   addUpgrade(upgrade: Upgrade) {
     this.upgrades.push(upgrade);
+  }
+  addUpgrades(upgrades: Upgrade[]) {
+    upgrades.forEach((upgrade) => this.upgrades.push(upgrade));
   }
 
   draw(host: HTMLElement) {
@@ -39,13 +42,14 @@ export class CookieClicker {
     container.appendChild(cookieContainer);
 
     const mainCookieButton = document.createElement("button");
-    mainCookieButton.title = this.mainCookie.description;
+    mainCookieButton.title = "Get a cookie each time you click";
+    mainCookieButton.innerHTML =
+      '<img src="cookie.png" width = "200" height = "200" />';
     mainCookieButton.className = "Cookie";
     //mainCookieButton.innerHTML = `${this.mainCookie.name}`;
 
     fromEvent(mainCookieButton, "click").subscribe(() => {
       this.player.cookieAmount += 1;
-      console.log(this.player.cookieAmount);
       this.player.emitCurrentNumberOfCookies();
     });
     cookieContainer.appendChild(mainCookieButton);
@@ -58,14 +62,14 @@ export class CookieClicker {
     this.upgrades.forEach((upgrade) => {
       const upgradeButton = document.createElement("button");
       upgradeButton.className = "Upgrade";
-      upgradeButton.innerHTML = `${upgrade.name} ${upgrade.level}\nCost: ${upgrade.cost}`;
+      upgradeButton.innerHTML = `${upgrade.name} ${upgrade.level} <br/>Cost: ${upgrade.cost}`;
       upgradeButton.title = upgrade.description;
       upgradeButton.disabled = true;
       upgrades.appendChild(upgradeButton);
 
       fromEvent(upgradeButton, "click").subscribe((value) => {
         upgrade.levelUp(this.player);
-        upgradeButton.innerHTML = `${upgrade.name} ${upgrade.level}\nCost: ${upgrade.cost}`;
+        upgradeButton.innerHTML = `${upgrade.name} ${upgrade.level}<br/>Cost: ${upgrade.cost}`;
       });
     });
 

@@ -1,43 +1,65 @@
+//import { ActiveUpgrade } from "./activeupgrade";
 import { CookieClicker } from "./cookieclicker";
+//import { PassiveUpgrade } from "./passiveupgrade";
 import { Player } from "./player";
 import { Upgrade, UpgradeType } from "./upgrade";
 
-const passiveCookiebonusTimed = new Upgrade(
+const player = new Player();
+
+const CookieBonusTimed = new /*Passive*/ Upgrade(
   "Rolling pin",
-  "Get a bonus amount of cookies every set amount of seconds",
+  "Get a bonus cookie every set amount of seconds",
   1,
   10,
-  UpgradeType.passiveTimed
+  UpgradeType.Timed,
+  player.cookieCountObservable
 );
 
-const onClickCookiebonus = new Upgrade(
+const CookieBonusOnClick = new /*Passive*/ Upgrade(
   "A helping hand",
-  "Once every five seconds when clicking on a cookie you get a bonus one",
+  /*Once every five seconds*/ "When clicking you get a bonus cookie",
   1,
   15,
-  UpgradeType.activeOnClick
+  UpgradeType.OnClick,
+  player.cookieCountObservable
+);
+const CookieBonusOnClickTimed = new /*Passive*/ Upgrade(
+  "Right on time",
+  "Once every five seconds when clicking you get a bonus cookie",
+  1,
+  15,
+  UpgradeType.OnClickTimed,
+  player.cookieCountObservable
 );
 
-const bonusCookieEveryFifth = new Upgrade(
-  "Luck of the baker",
+const CookieBonusEveryFifth = new /*Active*/ Upgrade(
+  "The collector",
+  "Every five cookies you collect you get a bonus cookie",
+  1,
+  30,
+  UpgradeType.OnFiveCookiesBonus,
+  player.cookieCountObservable
+);
+const CookieBonusRandomChanceOnClick = new /*Active*/ Upgrade(
+  "A stroke of luck",
   "Each click has a small chance of getting you a bonus cookie",
   1,
   30,
-  UpgradeType.passiveAccumulative
+  UpgradeType.OnClickRandomChance,
+  player.cookieCountObservable
 );
 
 let upgradeArray = [
-  passiveCookiebonusTimed,
-  onClickCookiebonus,
-  bonusCookieEveryFifth,
+  CookieBonusTimed,
+  CookieBonusOnClick,
+  CookieBonusOnClickTimed,
+  CookieBonusEveryFifth,
+  CookieBonusRandomChanceOnClick,
 ];
-let observablesArray = upgradeArray.map((element) => element.observable);
-const player = new Player();
+//let observablesArray = upgradeArray.map((element) => element.observable);
 
 const game = new CookieClicker(player);
 
-game.addUpgrade(passiveCookiebonusTimed);
-game.addUpgrade(onClickCookiebonus);
-game.addUpgrade(bonusCookieEveryFifth);
+game.addUpgrades(upgradeArray);
 
 game.draw(document.body);

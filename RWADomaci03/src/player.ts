@@ -17,26 +17,28 @@ export class Player {
   }
   //draw(host: HTMLElement) {}
 
-  pushObservable(
-    observable: Observable<number>,
-    type: UpgradeType,
-    amount: number,
-    level: number
-  ) {
+  pushObservable(observable: Observable<number>, type: UpgradeType) {
     this.observablesArray.push(observable);
     observable.subscribe((value) => {
       switch (type) {
-        case UpgradeType.passiveAccumulative: {
-          let randomNumber = Math.random() * 10 + level * 0.1;
-          if (randomNumber > 8) this.cookieAmount += 1;
-          break;
-        }
-        case UpgradeType.passiveTimed: {
+        case UpgradeType.Timed: {
           this.cookieAmount += 1;
           break;
         }
-        case UpgradeType.activeOnClick: {
-          this.cookieAmount += amount;
+        case UpgradeType.OnClick: {
+          this.cookieAmount += 1;
+          break;
+        }
+        case UpgradeType.OnClickTimed: {
+          this.cookieAmount += 1;
+          break;
+        }
+        case UpgradeType.OnFiveCookiesBonus: {
+          this.cookieAmount += 1;
+          break;
+        }
+        case UpgradeType.OnClickRandomChance: {
+          if (Math.random() > 0.8) this.cookieAmount += 1;
           break;
         }
       }
