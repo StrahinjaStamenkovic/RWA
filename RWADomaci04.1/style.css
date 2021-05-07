@@ -1,4 +1,6 @@
 .matchContainer,.clubContainer{
   display:flex;
-
+}
+.clubContainer div,.matchContainer div {
+  margin-right: 10px;
 }

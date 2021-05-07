@@ -1,42 +1,49 @@
-import { from, fromEvent, Observable } from "rxjs";
+import { from, fromEvent, merge, Observable } from "rxjs";
 import { debounceTime, filter, map, switchMap } from "rxjs/operators";
-import { Match } from "./interfaces";
-import { fetchAllMatches, fetchClubIdByName, fetchMatchesByAway, fetchMatchesByHome } from "./servercalls";
+import { Club, Match } from "./interfaces";
+import { fetchAllClubs, fetchAllMatches, fetchClubById, fetchClubsByCity, fetchClubsIdByName, fetchMatchesByAway, fetchMatchesByHome, getAnyMatches } from "./servercalls";
 
-/*export function emitInputMatches():Observable<string>{
+export function emitInputMatches():Observable<string>{
     return fromEvent(document.querySelector('.searchBarMatches'),"input").pipe(
-        debounceTime(1000),
-        map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value),
-        filter(el=>el.length>2)
+        debounceTime(500),
+        map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value)
     )
 }
 
-export function emitMatches(inputPolaziste:HTMLInputElement):Observable<Match[]>{
-    return <Observable<Match[]>> emitInputMatches().pipe(
+export function emitMatches():Observable<any>{
+    
+    return emitInputMatches().pipe(
      switchMap( async (clubName)=>{
-        let clubId = await fetchClubIdByName(clubName);
+         if(clubName==="")
+            return await fetchAllMatches();
 
-         let matchesHome= await fetchMatchesByHome(clubId);
-         let matchesAway= await fetchMatchesByAway(clubId);
+        let clubs = await fetchClubsIdByName(clubName);
+        let clubsIds = clubs.map(club => club.id)
 
-         return from(matchesHome.join(matchesAway));
- 
-      } ));
+        let matchesFiltered= new Array<Match>();
+        clubsIds.forEach(async id=>{
+            matchesFiltered=matchesFiltered.concat(await getAnyMatches(id))
+        })
+         return from(matchesFiltered);
+      }),
+
+      );
  }
 
  export function emitInputClubs():Observable<string>{
     return fromEvent(document.querySelector('.searchBarClubs'),"input").pipe(
         debounceTime(1000),
-        map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value),
-        filter(el=>el.length>2)
+        map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value)
     )
 }
 
 
-export function emitClubs():Observable<Match[]>{
-    return emitInput().pipe(
-     switchMap(clubCity=>{
-         return from(())
- 
-      } ))
- }*/
+export function emitClubs():Observable<any>{
+    return emitInputClubs().pipe(
+     switchMap(async (clubCity:string)=>{
+         if(clubCity==="")
+            return from( await fetchAllClubs())
+         else
+            return from( await fetchClubsByCity(clubCity))
+      }));
+ }

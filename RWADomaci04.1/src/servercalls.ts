@@ -35,7 +35,7 @@ export async function fetchClubById(id:number):Promise<Club>{
 }
 
 export async function fetchClubsByCity(city:string):Promise<Club[]>{
-    return fetch(`http://localhost:3000/clubs?city=*${city}*`).then((response)=>{
+    return fetch(`http://localhost:3000/clubs?city=${city}`).then((response)=>{
 
         if(response.ok)
             return response.json();
@@ -44,11 +44,11 @@ export async function fetchClubsByCity(city:string):Promise<Club[]>{
 
   }).catch((err)=>console.log(err));
 }
-export async function fetchClubIdByName(name:string):Promise<number>{
+export async function fetchClubsIdByName(name:string):Promise<Club[]>{
     return fetch(`http://localhost:3000/clubs?name=${name}`).then((response)=>{
 
         if(response.ok)
-            return response.json().then(club=> club.id);
+            return response.json();
         else throw new Error("Not found");
 
 
@@ -56,7 +56,6 @@ export async function fetchClubIdByName(name:string):Promise<number>{
 }
 export async function fetchMatchesByHome(homeId:number):Promise<Match[]>{
     return fetch(`http://localhost:3000/clubs?homeId=${homeId}`).then((response)=>{
-
         if(response.ok)
             return response.json();
         else throw new Error("Not found");
@@ -68,4 +67,10 @@ export async function fetchMatchesByAway(awayId:number):Promise<Match[]>{
             return response.json();
         else throw new Error("Not found");
   }).catch((err)=>console.log(err));
+}
+
+export async function getAnyMatches(Id:number){
+    let matches =  await fetchMatchesByHome(Id);
+    matches.concat(await fetchMatchesByAway(Id));
+    return matches;
 }

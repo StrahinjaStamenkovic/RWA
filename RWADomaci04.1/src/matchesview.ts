@@ -1,8 +1,8 @@
 import { Club, Match } from "./interfaces";
+import { emitClubs, emitMatches } from "./reactiveapi";
 import { fetchAllClubs, fetchAllMatches, fetchClubById } from "./servercalls";
 
 export class MatchesView{
-    //private archive:MatchesArchive;
     private container:HTMLElement;
 
     constructor(host:HTMLElement){
@@ -14,39 +14,49 @@ export class MatchesView{
         this.container.className="container";
 
     }
-    draw(){
+    async draw(){
         this.drawSearchBarMatches(this.container);
-        this.drawAllMatches(this.container);
-        this.drawSearchBarClubs(this.container);
-        this.drawAllClubs(this.container);
-    }
-   
-    
-    drawAllMatches(host:HTMLElement){
+
         let allMatchesContainer = document.createElement('div');
-        host.appendChild(allMatchesContainer);
+        this.container.appendChild(allMatchesContainer);
         allMatchesContainer.className = 'allMatches';
+        this.drawAllMatches(allMatchesContainer,await fetchAllMatches());
+
+        this.drawSearchBarClubs(this.container);
+
+        let allClubsContainer = document.createElement('div');
+        this.container.appendChild(allClubsContainer);
+        allClubsContainer.className = 'allClubsContainer';
+        this.drawAllClubs(allClubsContainer,await fetchAllClubs());
 
 
-        fetchAllMatches().then(data=>{
-            data.forEach((element:Match)=>
-                this.drawIndividualMatch(allMatchesContainer,element))
-        })
-        .catch(err=>{
-            console.log(err);
+        this.generateSubscribers();
+    }
+    generateSubscribers(){
+        emitMatches().subscribe(matches=>{
+            this.drawAllMatches(document.querySelector('.allMatches'),matches);
         });
-        
+        emitClubs().subscribe(clubs=>{
+            this.drawAllClubs(document.querySelector('.allClubsContainer'),clubs)
+        })
+    }
+    
+    drawAllMatches(host:HTMLElement,matches:Match[]){
+        this.removeChildren(host);
+            matches.forEach((element:Match)=>{
+                let matchDiv = document.createElement('div');
+                matchDiv.className = 'matchContainer';
+                host.appendChild(matchDiv);
+                this.drawIndividualMatch(matchDiv,element)});
     }
 
-    async drawIndividualMatch(allMatchesContainer: HTMLDivElement,match:Match) {
-        let matchDiv = document.createElement('div');
-        matchDiv.className = 'matchContainer';
-        allMatchesContainer.appendChild(matchDiv);
+    async drawIndividualMatch(host: HTMLDivElement,match:Match) {
+        
 
         let attributeDiv;
         await fetchClubById(match.homeId).then(data=>{
             attributeDiv = document.createElement('div');
-            matchDiv.appendChild(attributeDiv);
+            host.appendChild(attributeDiv);
             attributeDiv.innerHTML = data.name;
         })
         .catch(err=>{
@@ -54,13 +64,13 @@ export class MatchesView{
         });
 
         attributeDiv =document.createElement('div');
-        matchDiv.appendChild(attributeDiv);
+        host.appendChild(attributeDiv);
         attributeDiv.innerHTML = match.score;
 
 
         await fetchClubById(match.awayId).then(data=>{
             attributeDiv = document.createElement('div');
-            matchDiv.appendChild(attributeDiv);
+            host.appendChild(attributeDiv);
             attributeDiv.innerHTML = data.name;
         })
         .catch(err=>{
@@ -69,12 +79,10 @@ export class MatchesView{
 
     }
 
-    drawAllClubs(host:HTMLElement){
-        let allClubsContainer = document.createElement('div');
-        host.appendChild(allClubsContainer);
-        allClubsContainer.className = 'allClubsContainer';
-        fetchAllClubs().then(data=>{
-            data.forEach((element:Club)=>{
+    drawAllClubs(host:HTMLElement,clubs:Club[]){
+        
+        this.removeChildren(host);
+            clubs.forEach((element:Club)=>{
                 
             let clubContainer = document.createElement('div');
             host.appendChild(clubContainer);
@@ -91,11 +99,6 @@ export class MatchesView{
             clubAttribute.innerHTML = element.city;
 
             });
-        })
-        .catch(err=>{
-            console.log(err);
-        });
-        
     }
     drawSearchBarMatches(host: HTMLElement) {
         let searchBarMatches = document.createElement('div');
@@ -123,5 +126,11 @@ export class MatchesView{
         let searchBar = document.createElement('input');
         searchBar.className = 'searchClubs'
         searchBarClubs.appendChild(searchBar);
+    }
+    removeChildren(host:HTMLElement){
+        while(host.hasChildNodes())
+        {
+            host.removeChild(host.childNodes[0]);
+        }
     }
 }
