@@ -1,0 +1,37 @@
+<h1>PCBuilder</h1>
+
+
+<h3>Cases List</h3>
+<div class="cases">
+<app-case-component *ngFor="let x of cases" [case]=x></app-case-component>
+</div>
+
+<h3>Graphics Card List</h3>
+<div class="gpu">
+<app-graphicscard-component *ngFor="let x of graphicsCards" [graphicscard]=x></app-graphicscard-component>
+</div>
+
+<h3>Motherboard List</h3>
+<div class="motherboard">
+<app-motherboard-component *ngFor="let x of motherBoards" [motherboard]=x></app-motherboard-component>
+</div>
+
+<h3>Power Supply List</h3>
+<div class="psu">
+<app-powersupply-component *ngFor="let x of powerSupplies" [psu]=x></app-powersupply-component>
+</div>
+
+<h3>Processor List</h3>
+<div class="processor">
+<app-processor-component *ngFor="let x of processors" [cpu]=x></app-processor-component>
+</div>
+
+<h3>Ram List</h3>
+<div class="ram">
+<app-ram-component *ngFor="let x of ram" [ram]=x></app-ram-component>
+</div>
+
+<h3>Storage List</h3>
+<div class="storage">
+<app-storage-component *ngFor="let x of storage" [storage]=x></app-storage-component>
+</div>
